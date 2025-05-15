@@ -1,0 +1,260 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #648767;
+  color: rgb(31, 31, 31);
+  padding: 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #003c30;
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  background: #f8fcec;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.input-container div {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+input[type="number"] {
+  width: 60px;
+  padding: 0.5rem;
+  background: #f2f2f2;
+  color: rgb(25, 25, 25);
+  border: 1px solid #7f8c8d;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+} 
+
+button {
+  margin-top: 2.5rem;
+  padding: 0.5rem 1.2rem;
+  background: #8CBC90;
+  color: rgb(26, 26, 26);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background: #95ffcf;
+}
+
+/* Both Tables */
+#inputTable, #finalMatrix {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  table-layout: fixed; /* Ensures the table cells are evenly sized */
+}
+
+/* Table Header */
+th, td {
+  padding: 1rem;
+  text-align: center;
+  vertical-align: top; 
+  border: 1px solid #e8e8e8;
+}
+
+/* Input Table */
+#inputTable tr:nth-child(odd) {
+  background: #8CBC90;
+}
+#inputTable tr:nth-child(even) {
+  background: #ffffff;
+}
+
+/* Final Matrix */
+#finalMatrix tr:nth-child(odd) {
+  background: #8CBC90;
+}
+#finalMatrix tr:nth-child(even) {
+  background: #ffffff;
+}
+
+/* Ensure that input cells are aligned properly */
+#inputTable td input, #finalMatrix td input {
+  text-align: center;
+  vertical-align: middle; /* Keep input fields centered vertically */
+}
+
+
+/* Style for the total cost display below Solve and Next buttons */
+#solveSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* This adds spacing between the buttons and the total cost display */
+}
+
+#totalCostFormula, #totalCost {
+  margin-top: 1rem; /* Adds space between the buttons and the total cost */
+  font-size: 1.2rem; /* Optional: Adjust font size for better visibility */
+  color: #333; /* Optional: Change text color */
+  text-align: center; /* Centers the text */
+}
+
+/* Style for the "Create Closed Path Table" button */
+#createClosedPathTableButton {
+  margin-top: 2.5rem;
+  padding: 0.5rem 1.2rem;
+  background: #8CBC90;
+  color: rgb(26, 26, 26);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for the new button */
+#createClosedPathTableButton:hover {
+  background: #95ffcf;
+}
+
+#continueButtonContainer button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
+  background: #8CBC90;
+  color: rgb(26, 26, 26);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#continueButtonContainer button:hover {
+  background: #95ffcf;
+}
+.stepping-stone-sign {
+    font-weight: bold;
+    color: black;
+    background-color: #e0f7fa; /* Light cyan */
+    text-align: center;
+}
+
+.highlight-cell {
+    background-color: #ffcccb !important; /* Light red for the most negative cell */
+    font-weight: bold;
+}
+
+.steppingstone-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  table-layout: fixed;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.steppingstone-table th, .steppingstone-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0.5rem;
+  text-align: center;
+  position: relative;
+  width: 60px;
+  height: 40px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.cost-tag {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 11px;
+  color: #555;
+}
+
+.stepping-stone-sign {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.positive-sign {
+  color: #2e7d32; /* green */
+}
+
+.negative-sign {
+  color: #c62828; /* red */
+}
+
+.allocated-cell {
+  background-color: #c8e6c9; /* Light green */
+  font-weight: bold;
+}
+
+.allocation-tag {
+  margin-top: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.highlight-cell {
+  background-color: #ffeb3b !important; /* Yellow highlight */
+  font-weight: bold;
+}
+
+.table-label {
+  margin-top: 20px;
+}
+
+.instruction-label {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.total-cost {
+  margin-top: 20px;
+  color: #2e7d32;
+}
+

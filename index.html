@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northwest Corner Method</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="northwest_corner.js" defer></script>
+  <script src="stepping_stone.js" defer></script>
+</head>
+<body>
+  <h1>North-West Corner Method Transportation Model</h1>
+  <div class="container">
+    <!-- Input section for user to define matrix size -->
+    <div class="input-container">
+      <div>
+        <label for="rowsInput">Rows (Supply):</label>
+        <input type="number" id="rowsInput" value="3" min="1">
+      </div>
+      <div>
+        <label for="columnsInput">Columns (Demand):</label>
+        <input type="number" id="columnsInput" value="3" min="1">
+      </div>
+      <!-- Buttons to generate empty or sample tables -->
+      <button onclick="generateTable()">Generate Table</button>
+      <button onclick="generateSample()">Generate Sample</button>
+    </div>
+
+    <!-- Option to add dummy supply or demand to balance the problem -->
+    <div>
+      <label><input type="radio" name="dummyOption" value="none" checked> No Dummy</label>
+      <label><input type="radio" name="dummyOption" value="supply"> Add Dummy Supply</label>
+      <label><input type="radio" name="dummyOption" value="demand"> Add Dummy Demand</label>
+    </div>
+   
+    <!-- Placeholder where the generated input table will appear -->
+    <div id="tableSection"></div>
+
+    <!-- Button to generate the cost and allocation matrix based on input -->
+    <div>
+      <button onclick="generateMatrix()">Generate Matrix</button>
+    </div>
+    
+    <!-- Placeholder for the final cost matrix table -->
+    <div id="finalTable"></div>
+
+    <!-- Display area for total cost formula and calculated total cost -->
+    <p id="totalCostFormula"></p>
+    <p id="totalCost"></p>
+
+    <!-- Section that becomes visible after matrix is generated to solve problem -->
+    <div id="solveSection" style="display: none;">
+      <!-- Button to start solving with North-West Corner method -->
+      <button onclick="solveNorthWestCorner()">Solve</button>
+
+      <!-- Button for stepping through solution steps (disabled initially) -->
+      <button id="nextStepButton" style="margin-top: 20px;" disabled>Next</button>
+
+      <!-- Optional total cost display area -->
+      <div id="totalCostDisplay"></div>
+
+      <!-- Stepping Stone method section, hidden until triggered -->
+      <div id="steppingStoneSection" style="display: none;">
+        <h3>Stepping Stone Table</h3>
+        <table id="steppingStoneMatrix" border="1"></table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
