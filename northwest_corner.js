@@ -1,4 +1,4 @@
-// Reset the solver state variables before starting or restarting
+ // Reset the solver state variables before starting or restarting
 function resetSolverData() {
   currentStep = 0;         // Reset step counter
   allocatedValues = [];    // Clear previous allocations
@@ -167,6 +167,12 @@ async function allocateSupply(i, j, rows, supply, demand) {
 function displayTotalCost() {
   let totalCost = 0;
   let formula = "Total Cost Formula = ";
+
+   // Hide Next button when total cost is shown
+  const nextBtn = document.getElementById('nextStepButton');
+  if (nextBtn) {
+    nextBtn.style.display = 'none';
+  }
 
   // Sum up all allocated units times their costs and build formula string
   for (let i = 0; i < allocatedValues.length; i++) {

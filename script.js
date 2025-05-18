@@ -234,6 +234,10 @@ function generateMatrix() {
   // Clear any previous total cost displays
   const formulaElem = document.getElementById('totalCostFormula');
   const totalCostElem = document.getElementById('totalCost');
+  const nextBtn = document.getElementById('nextStepButton');
+  if (totalCostElem && totalCostElem.textContent.trim() !== '') {
+    if (nextBtn) nextBtn.style.display = 'none';  // Hide next button
+  }
   if (formulaElem) formulaElem.textContent = '';
   if (totalCostElem) totalCostElem.textContent = '';
 
@@ -340,7 +344,7 @@ for (let j = 1; j <= demandCount; j++) {
   
   // Clear old matrix and append new one
   const finalTableSection = document.getElementById('finalTable');
-  finalTableSection.innerHTML = '<h2>Generated Matrix:</h2>';
+  finalTableSection.innerHTML = '<h2>North West Corner Method:</h2>';
   finalTableSection.appendChild(final);
 
   // Check if supply and demand are not equal, adjust with dummy supply/demand
@@ -349,19 +353,19 @@ for (let j = 1; j <= demandCount; j++) {
   }
 
   // Clear the old Solve button before creating a new one
-    document.getElementById('solveSection').innerHTML = '';
+  const solveSection = document.getElementById('solveSection');
+  solveSection.innerHTML = ''; // clear old buttons
 
-    // Create a new Solve button and add it to the page
-    const solveBtn = document.createElement('button');
-    solveBtn.textContent = 'Solve';
+  const solveBtn = document.createElement('button');
+  solveBtn.textContent = 'Solve';
 
-    // When clicked, it will start the solving process using the North-West Corner method
-    solveBtn.addEventListener('click', function() {
-      solveNorthWestCorner(final);
-    });
+  solveBtn.addEventListener('click', function() {
+    solveBtn.style.display = 'none';  // hide this button when clicked
+    solveNorthWestCorner(final);
+  });
 
-    // Add the Solve button inside the solve section
-    document.getElementById('solveSection').appendChild(solveBtn);
+  solveSection.appendChild(solveBtn);
+
 }
 
 function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
