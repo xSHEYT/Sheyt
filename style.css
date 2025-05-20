@@ -701,7 +701,7 @@ body.dark-mode #totalCost {
   transform: translateX(-50%);
   font-size: 14px;
   font-weight: bold;
-  color: black; /* default */
+  color: blue; /* default */
 }
 
 body.dark-mode .allocation-value {
@@ -712,6 +712,7 @@ body.dark-mode .allocation-value {
   top: 2px;
   right: 4px;
   font-size: 12px;
+  font-weight: bold;
   color: black; /* default light mode */
 }
 
