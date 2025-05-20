@@ -258,3 +258,535 @@ th, td {
   color: #2e7d32;
 }
 
+/* Toggle switch style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  vertical-align: middle;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; width: 26px;
+  left: 4px; bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+body.dark-mode #nextStepButton,
+body.dark-mode #doneButton,
+body.dark-mode #startSteppingStoneButton {
+  background: #444;
+  color: #f0f0f0;
+  border: 1px solid #888;
+}
+
+body.dark-mode #nextStepButton:hover,
+body.dark-mode #doneButton:hover,
+body.dark-mode #startSteppingStoneButton:hover {
+  background: #555;
+}
+
+body.dark-mode del {
+  color: #bbb;
+}
+.greyed-out {
+  background-color: #d3d3d3;
+}
+
+body.dark-mode .greyed-out {
+  background-color: #525457;
+}
+body.dark-mode {
+  background: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode {
+  background: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode .container {
+  background: #1e1e1e;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode input[type="number"] {
+  background: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #888;
+}
+
+body.dark-mode button {
+  background: #333;
+  color: #f0f0f0;
+}
+
+body.dark-mode button:hover {
+  background: #444;
+}
+
+body.dark-mode table {
+  background: #2b2b2b;
+  color: #f0f0f0;
+}
+
+body.dark-mode th, 
+body.dark-mode td {
+  border-color: #555;
+}
+
+body.dark-mode #inputTable tr:nth-child(odd),
+body.dark-mode #finalMatrix tr:nth-child(odd) {
+  background: #2e3b2e;
+}
+
+body.dark-mode #inputTable tr:nth-child(even),
+body.dark-mode #finalMatrix tr:nth-child(even) {
+  background: #1e1e1e;
+}
+/* Toggle switch style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  vertical-align: middle;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; width: 26px;
+  left: 4px; bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+
+/* Table styling */
+#steppingstonetable {
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+#steppingstonetable th, #steppingstonetable td {
+  width: 70px;
+  height: 75px;
+  text-align: center;
+  position: relative;
+  border: 1px solid #ccc;
+  color: #000;
+}
+#steppingstonetable td.allocated {
+  background-color: #c8e6c9;
+}
+
+body.dark-mode #steppingstonetable {
+  background-color: #2b2b2b;
+  color: #eee;
+}
+
+body.dark-mode #steppingstonetable th,
+body.dark-mode #steppingstonetable td {
+  border-color: #444;
+  color: #eee;
+  background-color: transparent;
+}
+
+/* Special allocated cell background */
+#steppingstonetable td.allocated-light {
+  background-color: #c8e6c9;
+  color: #000;
+}
+
+body.dark-mode #steppingstonetable td.allocated-dark {
+  background-color: #446c47;
+  color: #fff;
+}
+
+/* Cost tag styling */
+.cost-tag {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 11px;
+  color: #555;
+}
+
+body.dark-mode .cost-tag {
+  color: #aaa;
+}
+
+/* Allocation tag */
+.alloc-tag {
+  margin-top: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+body.dark-mode .alloc-tag {
+  color: #fff;
+}
+
+/* Label h3 */
+.stepping-label {
+  margin-top: 20px;
+  color: #0c0d0d;
+}
+
+body.dark-mode .stepping-label {
+  color: #eee;
+}
+
+/* Solve button */
+.solve-button {
+  margin-top: 20px;
+  background-color: #8CBC90;
+  color: #000;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+body.dark-mode .solve-button {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #555;
+}
+/* Light mode allocated cell */
+#steppingstonetable td.allocated {
+  background-color: #c8e6c9;  /* light green */
+  color: #000;
+}
+
+/* Dark mode allocated cell */
+body.dark-mode #steppingstonetable td.allocated {
+  background-color: #446c47;  /* dark green */
+  color: #fff;
+}
+#solveSection h3.new-stepping-stone-label {
+  color: #000; /* light mode color */
+}
+
+body.dark-mode #solveSection h3.new-stepping-stone-label {
+  color: #eee; /* dark mode color */
+}
+
+/* Light mode text */
+.toggle-text {
+  color: #000;
+  margin-top: 20px;
+}
+
+/* Dark mode text */
+body.dark-mode .toggle-text {
+  color: #eee;
+}
+#steppingstonetable td.allocated {
+  background-color: #c8e6c9;  /* light green */
+  color: #000;
+}
+
+body.dark-mode #steppingstonetable td.allocated {
+  background-color: #446c47;  /* dark green */
+  color: #eee;
+}
+#steppingstonetable td.highlight-yellow {
+  background-color: #ffeb3b; /* light mode yellow */
+}
+
+body.dark-mode #steppingstonetable td.highlight-yellow {
+  background-color: #cabf4b; /* dark mode yellow */
+}
+
+#steppingstonetable td.highlight-grey {
+  background-color: #aaa; /* light mode grey */
+}
+
+body.dark-mode #steppingstonetable td.highlight-grey {
+  background-color: #555; /* dark mode grey */
+}
+/* default (light mode) */
+th.header-label {
+  color: #000;
+}
+
+/* dark mode */
+.dark-mode th.header-label {
+  color: #eee;
+}
+.formula-text {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.dark-mode .formula-text {
+  color: #eee;
+}
+
+.result-text {
+  margin-top: 10px;
+  color: #2e7d32;
+}
+
+.dark-mode .result-text {
+  color: #80e27e;
+}
+/* Light mode (default) */
+.unallocated-cell {
+  background-color: #fff;
+}
+.allocated-cell {
+  background-color: #c8e6c9;
+  font-weight: bold;
+}
+
+/* Dark mode override */
+.dark-mode .unallocated-cell {
+  background-color: #333;
+}
+.dark-mode .allocated-cell {
+  background-color: #446c47;
+}
+/* Light Mode */
+.allocated {
+  background-color: #c8e6c9;
+  color: #000;
+  font-weight: bold;
+}
+
+
+/* Dark Mode */
+.dark-mode .allocated {
+  background-color: #446c47;
+  color: #fff;
+}
+.dark-mode .unallocated {
+  background-color: #333;
+  color: #eee;
+}
+
+/* Cost, arrow, sign tag styles */
+.cost-tag {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 12px;
+}
+
+.dark-mode .cost-tag {
+  color: #bbb;
+}
+.cost-tag {
+  color: #555;
+}
+
+.arrow-tag {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Light mode */
+.allocated-cell {
+    background-color: #c8e6c9;
+}
+
+
+/* Dark mode */
+.dark-mode .allocated-cell {
+    background-color: #446c47;
+}
+
+
+.cost-tag {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 11px;
+    color: inherit;
+}
+
+.alloc-value {
+    color: inherit;
+}
+
+/* Optional label style */
+.new-stepping-stone-label {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 24px;
+}
+#totalCostFormula {
+  color: #333; /* light mode */
+}
+
+#totalCost {
+  color: #2e7d32; /* light mode green */
+}
+
+body.dark-mode #totalCostFormula {
+  color: #eee; /* dark mode */
+}
+
+body.dark-mode #totalCost {
+  color: #4caf50; /* dark mode green */
+}
+.allocation-value {
+  position: absolute;
+  bottom: 17px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: black; /* default */
+}
+
+body.dark-mode .allocation-value {
+  color: white; /* bright blue for dark mode */
+}
+.cost-value {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 12px;
+  color: black; /* default light mode */
+}
+
+body.dark-mode .cost-value {
+  color: #ccc; /* light grey for dark mode */
+}
+
+#startSteppingStoneButton {
+  background-color: #8CBC90;
+  color: #000;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode #startSteppingStoneButton {
+  background-color: #333;
+  color: #eee;
+}
+.solve-button {
+  margin-top: 20px;
+  background-color: #8CBC90;
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .solve-button {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #555;
+}
+.next-button {
+  background-color: #8CBC90;
+  color: #000;
+  border: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .next-button {
+  background-color: #444;
+  color: #fff;
+}
+.dummy-demand-header {
+  background-color: #DEBFAA;
+  color: #222;
+}
+
+body.dark-mode .dummy-demand-header {
+  background-color: #b19aa6;
+  color: #eee;
+}
+.dummy-supply-header {
+  background-color: #DEBFAA;
+  color: #222;
+}
+
+body.dark-mode .dummy-supply-header {
+  background-color: #b19aa6;
+  color: #eee;
+}
+
+ /* Position the label in the upper right corner */
+  #modeLabel {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    color: #666;
+    user-select: none;
+    z-index: 1000;
+  }
+
+  /* Optional: smaller toggle next to label */
+  .switch {
+    position: fixed;
+    top: 30px;
+    right: 1px; /* Adjust this to put the toggle left of label */
+    transform: scale(0.8);
+    z-index: 1000;
+  }

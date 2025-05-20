@@ -58,16 +58,25 @@ async function solveNorthWestCorner(final) {
   let i = 0, j = 0;  // Start from the top-left corner cell
 
   // Only add the Next button if it's not already there
-  if (!document.getElementById('nextStepButton')) {
+    if (!document.getElementById('nextStepButton')) {
     const nextBtn = document.createElement('button');
     nextBtn.id = 'nextStepButton';
     nextBtn.textContent = 'Next';
+    nextBtn.classList.add('next-button'); // Add class for styling
 
-    // When Next button clicked, allocate as much as possible in current cell
+    // Keep static styles if needed
+    nextBtn.style.marginTop = '20px';
+    nextBtn.style.padding = '8px 16px';
+    nextBtn.style.fontSize = '16px';
+    nextBtn.style.cursor = 'pointer';
+    nextBtn.style.borderRadius = '5px';
+
+    // Add to DOM
+    document.getElementById('solveSection').appendChild(nextBtn);
+
     nextBtn.addEventListener('click', async () => {
-      nextBtn.disabled = true; // Prevent multiple clicks while processing
+      nextBtn.disabled = true;
 
-      // If all supply or demand exhausted, disable button, show total cost and Done button
       if (i >= supply.length || j >= demand.length) {
         nextBtn.disabled = true;
         displayTotalCost();
@@ -102,6 +111,7 @@ async function solveNorthWestCorner(final) {
   }
 }
 
+
 // Allocate supply/demand at cell (i, j)
 async function allocateSupply(i, j, rows, supply, demand) {
   const cell = rows[i + 1].cells[j + 1]; // Target cell in the table
@@ -113,15 +123,21 @@ async function allocateSupply(i, j, rows, supply, demand) {
   cell.style.position = 'relative';
   const allocDiv = document.createElement('div');
   allocDiv.textContent = allocation;
-  Object.assign(allocDiv.style, {
-    position: 'absolute',
-    bottom: '17px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    fontSize: '14px',
-    color: 'blue',
-    fontWeight: 'bold'
-  });
+
+  const isDarkMode = document.body.classList.contains('dark-mode');
+
+    Object.assign(allocDiv.style, {
+      position: 'absolute',
+      bottom: '17px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      fontSize: '14px',
+      fontWeight: 'bold'
+    });
+
+    allocDiv.classList.add('allocation-value');  // This is a separate statement
+
+
   cell.appendChild(allocDiv);
 
   // Mark allocated cells to avoid greying out later
@@ -145,7 +161,8 @@ async function allocateSupply(i, j, rows, supply, demand) {
     for (let col = 1; col <= demand.length; col++) {
       const c = rows[i + 1].cells[col];
       if (!c.dataset.allocated) {
-        c.style.backgroundColor = '#525457';
+        c.style.backgroundColor = isDarkMode ? '#333' : '#525457';
+        c.style.color = isDarkMode ? '#aaa' : '#000';
       }
     }
   }
@@ -155,7 +172,8 @@ async function allocateSupply(i, j, rows, supply, demand) {
     for (let row = 1; row <= supply.length; row++) {
       const c = rows[row].cells[j + 1];
       if (!c.dataset.allocated) {
-        c.style.backgroundColor = '#525457';
+        c.style.backgroundColor = isDarkMode ? '#333' : '#525457';
+        c.style.color = isDarkMode ? '#aaa' : '#000';
       }
     }
   }
@@ -165,10 +183,12 @@ async function allocateSupply(i, j, rows, supply, demand) {
 
 // Calculate and display the total cost after allocations are done
 function displayTotalCost() {
+  const isDarkMode = document.body.classList.contains('dark-mode');
+
   let totalCost = 0;
   let formula = "Total Cost Formula = ";
 
-   // Hide Next button when total cost is shown
+  // Hide Next button when total cost is shown
   const nextBtn = document.getElementById('nextStepButton');
   if (nextBtn) {
     nextBtn.style.display = 'none';
@@ -188,18 +208,23 @@ function displayTotalCost() {
 
   formula = formula.slice(0, -3); // Remove trailing ' + '
 
-  document.getElementById('totalCostFormula').textContent = formula;
-  document.getElementById('totalCost').textContent = "Initial Total Cost = " + totalCost;
+  const formulaEl = document.getElementById('totalCostFormula');
+  const totalCostEl = document.getElementById('totalCost');
+
+  formulaEl.textContent = formula;
+  totalCostEl.textContent = "Initial Total Cost = " + totalCost;
 
   // Add a button to start the Stepping Stone method if it's not already added
   if (!document.getElementById('startSteppingStoneButton')) {
-    const startButton = document.createElement('button');
-    startButton.id = 'startSteppingStoneButton';
-    startButton.textContent = 'Start Stepping Stone';
-    startButton.addEventListener('click', startSteppingStoneMethod);
-    document.getElementById('solveSection').appendChild(startButton);
-  }
+  const startButton = document.createElement('button');
+  startButton.id = 'startSteppingStoneButton';
+  startButton.textContent = 'Start Stepping Stone';
+  startButton.addEventListener('click', startSteppingStoneMethod);
+
+  document.getElementById('solveSection').appendChild(startButton);
 }
+}
+
 
 // Starts the Stepping Stone method process (placeholder function check)
 function startSteppingStoneMethod() {

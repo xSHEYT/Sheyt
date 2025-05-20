@@ -218,17 +218,6 @@ document.addEventListener("DOMContentLoaded", function () {
   tableSection.appendChild(table);
 }
 
-// Adds a Solve button inside the solve section (not used here directly but kept for reference)
-function addSolveButton() {
-  const solveSection = document.getElementById('solveSection');
-  solveSection.innerHTML = '';
-  const solveBtn = document.createElement('button');
-  solveBtn.textContent = 'Solve';
-  solveBtn.addEventListener('click', generateMatrix);
-
-  solveSection.appendChild(solveBtn);
-}
-
 // Generates the matrix table from user input and prepares it for solving
 function generateMatrix() {
   // Clear any previous total cost displays
@@ -294,6 +283,9 @@ for (let j = 1; j <= demandCount; j++) {
       const input = rows[i].cells[j].querySelector('input');
       const cost = input ? (input.value || 0) : '0';
 
+      // Check if dark mode is on
+      const isDarkMode = document.body.classList.contains('dark-mode');
+
       // Show cost in cell with styling
       td.style.position = 'relative';
       const costDiv = document.createElement('div');
@@ -302,8 +294,8 @@ for (let j = 1; j <= demandCount; j++) {
       costDiv.style.top = '2px';
       costDiv.style.right = '4px';
       costDiv.style.fontSize = '12px';
-      costDiv.style.color = 'black';
-
+      costDiv.classList.add('cost-value');
+    
       td.appendChild(costDiv);
       tr.appendChild(td);
     }
@@ -353,14 +345,19 @@ for (let j = 1; j <= demandCount; j++) {
   }
 
   // Clear the old Solve button before creating a new one
-  const solveSection = document.getElementById('solveSection');
-  solveSection.innerHTML = ''; // clear old buttons
+  // Clear old buttons
+const solveSection = document.getElementById('solveSection');
+solveSection.innerHTML = '';
 
+  // Create the Solve button with styles and append it
   const solveBtn = document.createElement('button');
   solveBtn.textContent = 'Solve';
+  solveBtn.classList.add('solve-button');
+  solveBtn.style.marginTop = '20px';
+  solveBtn.style.cursor = 'pointer';
 
   solveBtn.addEventListener('click', function() {
-    solveBtn.style.display = 'none';  // hide this button when clicked
+    solveBtn.style.display = 'none';
     solveNorthWestCorner(final);
   });
 
@@ -369,21 +366,21 @@ for (let j = 1; j <= demandCount; j++) {
 }
 
 function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
+   const isDarkMode = document.body.classList.contains('dark-mode');
   const finalRows = final.rows;
   let realSupplyCount = supplyCount; // number of original supply rows
   let realDemandCount = demandCount; // number of original demand columns
 
   if (supplyTotal > demandTotal) {
-    // Supply exceeds demand, so we add a dummy demand column to balance
-
     const remainingDemand = supplyTotal - demandTotal;
 
     // Add header cell for the new dummy demand column, visually highlighted
-    const newDemandHeader = document.createElement('th');
-    newDemandHeader.textContent = `D${realDemandCount + 1}`;
-    newDemandHeader.style.backgroundColor = '#DEBFAA';
-    // Insert the new header before the last header (which is Supply)
-    finalRows[0].insertBefore(newDemandHeader, finalRows[0].cells[finalRows[0].cells.length - 1]);
+const newDemandHeader = document.createElement('th');
+newDemandHeader.textContent = `D${realDemandCount + 1}`;
+newDemandHeader.classList.add('dummy-demand-header'); // Apply reusable class
+
+finalRows[0].insertBefore(newDemandHeader, finalRows[0].cells[finalRows[0].cells.length - 1]);
+
 
     // Add a 0 cost cell for dummy demand to each supply row (to keep table consistent)
     for (let i = 1; i <= realSupplyCount; i++) {
@@ -394,31 +391,26 @@ function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
       newCell.style.verticalAlign = 'top';
       newCell.style.padding = '3.5px';
       newCell.style.fontSize = '12px';
-      newCell.style.color = 'black';
-
-      // Insert the dummy demand cell before the last cell (which is supply value)
+      newCell.style.color = isDarkMode ? '#eee' : '#222';
       tr.insertBefore(newCell, tr.cells[tr.cells.length - 1]);
     }
 
-    // Add the dummy demand quantity in the demand row before the last cell (empty corner)
     const newDemandCell = document.createElement('td');
     newDemandCell.textContent = remainingDemand;
+    newDemandCell.style.color = isDarkMode ? '#eee' : '#222';
     finalRows[finalRows.length - 1].insertBefore(newDemandCell, finalRows[finalRows.length - 1].cells[finalRows[finalRows.length - 1].cells.length - 1]);
 
-    realDemandCount++; // Increase demand count to include dummy column
+    realDemandCount++;
 
   } else {
-    // Demand exceeds supply, so we add a dummy supply row to balance
-
     const remainingSupply = demandTotal - supplyTotal;
 
-    // Create a new row for dummy supply
     const newSupplyRow = document.createElement('tr');
 
-    // Add header for the new dummy supply row, visually highlighted
+  // Add header for the new dummy supply row, visually highlighted
     const newSupplyHeader = document.createElement('th');
     newSupplyHeader.textContent = `S${realSupplyCount + 1}`;
-    newSupplyHeader.style.backgroundColor = '#DEBFAA';
+    newSupplyHeader.classList.add('dummy-supply-header'); // Reusable class
     newSupplyRow.appendChild(newSupplyHeader);
 
     // Add 0 cost cells for each demand column in this new dummy supply row
@@ -429,13 +421,14 @@ function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
       newCell.style.verticalAlign = 'top';
       newCell.style.padding = '3.5px';
       newCell.style.fontSize = '12px';
-      newCell.style.color = 'black';
+      newCell.style.color = isDarkMode ? '#eee' : '#222';
       newSupplyRow.appendChild(newCell);
     }
 
     // Add the dummy supply quantity at the end of the row
     const supplyTd = document.createElement('td');
     supplyTd.textContent = remainingSupply;
+    supplyTd.style.color = isDarkMode ? '#eee' : '#222';
     newSupplyRow.appendChild(supplyTd);
 
     // Insert the dummy supply row before the last row (which is the demand row)
@@ -444,6 +437,7 @@ function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
     realSupplyCount++; // Increase supply count to include dummy row
   }
 }
+
 
 
 /*

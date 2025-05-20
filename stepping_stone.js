@@ -3,6 +3,8 @@ function displaySteppingStoneTable() {
     const existingTable = document.getElementById('steppingstonetable');
     if (existingTable) return;
 
+    const isDarkMode = document.body.classList.contains('dark-mode');
+
     const table = document.createElement('table');
     table.id = 'steppingstonetable';
     table.style.marginTop = '20px';
@@ -19,6 +21,7 @@ function displaySteppingStoneTable() {
     for (let j = 0; j < demandCount; j++) {
         const th = document.createElement('th');
         th.textContent = 'D' + (j + 1);
+        // Remove inline color, let CSS handle it
         headerRow.appendChild(th);
     }
     table.appendChild(headerRow);
@@ -28,35 +31,37 @@ function displaySteppingStoneTable() {
         const row = document.createElement('tr');
         const label = document.createElement('th');
         label.textContent = 'S' + (i + 1);
+        // Remove inline color
         row.appendChild(label);
 
         for (let j = 0; j < demandCount; j++) {
             const td = document.createElement('td');
+
             td.style.width = '70px';
             td.style.height = '75px';
             td.style.textAlign = 'center';
             td.style.position = 'relative';
+            // Remove inline border, CSS will style it
 
             // Cost tag
             const costTag = document.createElement('div');
             costTag.textContent = costs[i][j];
-            Object.assign(costTag.style, {
-                position: 'absolute',
-                top: '2px',
-                right: '4px',
-                fontSize: '11px',
-                color: '#555'
-            });
+            costTag.style.position = 'absolute';
+            costTag.style.top = '2px';
+            costTag.style.right = '4px';
+            costTag.style.fontSize = '11px';
+            // Remove inline color, let CSS handle
             td.appendChild(costTag);
 
             // Allocation display
             if (allocatedValues[i][j] > 0) {
-                td.style.backgroundColor = '#c8e6c9';
+                td.classList.add('allocated');  // Use CSS class instead of inline style
                 const allocTag = document.createElement('div');
                 allocTag.textContent = allocatedValues[i][j];
                 allocTag.style.marginTop = '14px';
                 allocTag.style.fontWeight = 'bold';
-                allocTag.style.color = '#000';
+                // For color, you can keep inline or also use class if you want
+                td.style.color = ''; // Let CSS decide color
                 td.appendChild(allocTag);
             }
             row.appendChild(td);
@@ -67,6 +72,8 @@ function displaySteppingStoneTable() {
     const label = document.createElement('h3');
     label.textContent = 'Intial Stepping Stone Table';
     label.style.marginTop = '20px';
+    label.classList.add('new-stepping-stone-label');
+    
 
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(label);
@@ -76,16 +83,15 @@ function displaySteppingStoneTable() {
     const solveButton = document.createElement('button');
     solveButton.textContent = 'Solve Stepping Stone';
     solveButton.style.marginTop = '20px';
-    solveButton.onclick = function () {
-        displayClosedPathsAndCosts(true);  
-    };
-    solveSection.appendChild(solveButton);
+    solveButton.id = 'startSteppingStoneButton'; // So your CSS targets it correctly
 
     solveButton.onclick = function () {
-    solveButton.disabled = true;  // Disable button after click
-    displayClosedPathsAndCosts(true);
+        solveButton.disabled = true;
+        displayClosedPathsAndCosts(true);
     };
+    solveSection.appendChild(solveButton);
 }
+
 
 // Display Closed Paths and Net Cost Changes
 function displayClosedPathsAndCosts(isLoop = false) {
@@ -339,7 +345,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
     }
     newTable.appendChild(headerRow);
 
-    // Build sign map and arrow map
     const signMap = new Map();
     const arrowMap = new Map();
     const negativeCells = [];
@@ -372,7 +377,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
         }
     }
 
-    // Find least negative cell (minimum allocation on '-' sign)
     let leastNegativeCell = null;
     if (negativeCells.length > 0) {
         leastNegativeCell = negativeCells.reduce((min, cell) => cell.value < min.value ? cell : min);
@@ -393,67 +397,47 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
 
             const cellId = `S${i + 1}D${j + 1}`;
 
-            // Cost top-right
             const costTag = document.createElement('div');
             costTag.textContent = costs[i][j];
-            Object.assign(costTag.style, {
-                position: 'absolute',
-                top: '2px',
-                right: '4px',
-                fontSize: '12px',
-                color: '#555'
-            });
+            costTag.classList.add('cost-tag');
             td.appendChild(costTag);
 
-            // Sign top-left
             if (signMap.has(cellId)) {
                 const signTag = document.createElement('div');
                 signTag.textContent = signMap.get(cellId);
-                Object.assign(signTag.style, {
-                    position: 'absolute',
-                    top: '2px',
-                    left: '4px',
-                    fontSize: '30px',
-                    fontWeight: 'bold',
-                    color: signMap.get(cellId) === '+' ? '#2e7d32' : '#c62828'
-                });
+                signTag.style.position = 'absolute';
+                signTag.style.top = '2px';
+                signTag.style.left = '4px';
+                signTag.style.fontSize = '30px';
+                signTag.style.fontWeight = 'bold';
+                signTag.style.color = signMap.get(cellId) === '+' ? '#2e7d32' : '#c62828';
                 td.appendChild(signTag);
             }
 
-            // Arrow bottom-right
             if (arrowMap.has(cellId)) {
                 const arrowTag = document.createElement('div');
                 arrowTag.textContent = arrowMap.get(cellId);
-                Object.assign(arrowTag.style, {
-                    position: 'absolute',
-                    bottom: '2px',
-                    right: '4px',
-                    fontSize: '34px',
-                    fontWeight: 'bold',
-                    color: 'Black'
-                });
+                arrowTag.classList.add('arrow-tag');
                 td.appendChild(arrowTag);
             }
 
-            // Allocation value (centered)
             if (allocatedValues[i][j] > 0) {
-                td.style.backgroundColor = '#c8e6c9';
+                td.classList.add('allocated');
                 const allocTag = document.createElement('div');
                 allocTag.textContent = allocatedValues[i][j];
                 allocTag.style.marginTop = '14px';
                 allocTag.style.fontWeight = 'bold';
-                allocTag.style.color = '#000';
                 td.appendChild(allocTag);
+            } else {
+                td.classList.add('unallocated');
             }
 
-            // Highlight most negative cell
             if (cellId === mostNegativeCell) {
-                td.style.backgroundColor = '#ffeb3b';
+                td.classList.add('highlight-yellow');
             }
 
-            // Grey out least negative cell
             if (leastNegativeCell && leastNegativeCell.row === i && leastNegativeCell.col === j) {
-                td.style.backgroundColor = '#aaa';
+                td.classList.add('highlight-grey');
             }
 
             row.appendChild(td);
@@ -464,13 +448,13 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
 
     const label = document.createElement('h3');
     label.textContent = 'Grey: Add this value to + cells and Subtract from all (−) cells';
-    label.style.marginTop = '20px';
-    
+    label.classList.add('toggle-text');
 
     tableSection.appendChild(label);
     container.appendChild(tableSection);
     tableSection.appendChild(newTable);
 }
+
 
 
 // Calculate total transportation cost based on current allocations
@@ -489,6 +473,8 @@ function calculateTotalTransportationCost() {
         }
     }
 
+    const isDarkMode = document.body.classList.contains('dark-mode');
+
     // Join formula parts
     const formulaString = formulaParts.join(' + ');
 
@@ -497,17 +483,23 @@ function calculateTotalTransportationCost() {
     formulaElement.textContent = `Total Cost Formula = ${formulaString}`;
     formulaElement.style.marginTop = '20px';
     formulaElement.style.fontWeight = 'bold';
+    formulaElement.classList.add('formula-text');
+
 
     // Display final total cost
+    
     const result = document.createElement('h3');
     result.textContent = `Optimum Total Cost = ${totalCost}`;
     result.style.marginTop = '10px';
-    result.style.color = '#2e7d32';
+    result.style.color = isDarkMode ? '#80e27e' : '#2e7d32';
+    result.classList.add('result-text');
+
 
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(formulaElement);
     solveSection.appendChild(result);
 }
+
 
 // Perform Reallocation and update table
 function performReallocation(mostNegativeCell, closedPath, onDone) {
@@ -557,15 +549,12 @@ function performReallocation(mostNegativeCell, closedPath, onDone) {
 
 
 function displayReallocatedTable(minAllocation) {
-    const instructionLabel = document.createElement('h');
+    const instructionLabel = document.createElement('h3');
     instructionLabel.textContent = `New Stepping Stone Table`;
-    instructionLabel.style.fontWeight = 'bold';
-    instructionLabel.style.marginTop = '20px';
-    instructionLabel.style.fontSize = '24px';
+    instructionLabel.classList.add('new-stepping-stone-label');
 
     const table = document.createElement('table');
     table.id = 'reallocatedSteppingStoneTable';
-    table.style.marginTop = '10px';
 
     const supplyCount = allocatedValues.length;
     const demandCount = allocatedValues[0].length;
@@ -578,6 +567,7 @@ function displayReallocatedTable(minAllocation) {
     for (let j = 0; j < demandCount; j++) {
         const th = document.createElement('th');
         th.textContent = 'D' + (j + 1);
+        th.classList.add('header-label');
         headerRow.appendChild(th);
     }
     table.appendChild(headerRow);
@@ -586,6 +576,7 @@ function displayReallocatedTable(minAllocation) {
         const row = document.createElement('tr');
         const labelCell = document.createElement('th');
         labelCell.textContent = 'S' + (i + 1);
+        labelCell.classList.add('header-label');
         row.appendChild(labelCell);
 
         for (let j = 0; j < demandCount; j++) {
@@ -593,40 +584,32 @@ function displayReallocatedTable(minAllocation) {
             td.style.width = '70px';
             td.style.height = '75px';
             td.style.textAlign = 'center';
+            td.style.position = 'relative';
 
             const costTag = document.createElement('div');
             costTag.textContent = costs[i][j];
-            costTag.style.position = 'absolute';
-            costTag.style.top = '2px';
-            costTag.style.right = '4px';
-            costTag.style.fontSize = '11px';
-            costTag.style.color = '#555';
-            td.style.position = 'relative';
+            costTag.classList.add('cost-tag');
             td.appendChild(costTag);
 
             if (allocatedValues[i][j] > 0) {
-                td.style.backgroundColor = '#c8e6c9';
-                const alloc = document.createElement('div');
-                alloc.textContent = allocatedValues[i][j];
-                alloc.style.marginTop = '14px';
-                alloc.style.fontWeight = 'bold';
-                td.appendChild(alloc);
-            }
+            td.classList.add('allocated-cell');
+            const alloc = document.createElement('div');
+            alloc.textContent = allocatedValues[i][j];
+            alloc.style.marginTop = '14px';
+            alloc.style.fontWeight = 'bold';
+            alloc.classList.add('alloc-value');
+            td.appendChild(alloc);
+        }
+
+
             row.appendChild(td);
         }
         table.appendChild(row);
     }
+
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(instructionLabel);
     solveSection.appendChild(table);
-}
-
-// Display Allocation Summary
-function displayAllocationSummary() {
-    for (let i = 0; i < allocatedValues.length; i++) {
-        for (let j = 0; j < allocatedValues[i].length; j++) {
-        }
-    }
 }
 
 
