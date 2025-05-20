@@ -71,7 +71,7 @@ function displaySteppingStoneTable() {
 
     const label = document.createElement('h3');
     label.textContent = 'Intial Stepping Stone Table';
-    label.style.marginTop = '20px';
+    label.style.marginTop = '30px';
     label.classList.add('new-stepping-stone-label');
     
 

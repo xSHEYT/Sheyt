@@ -186,7 +186,6 @@ th, td {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  border: 1px solid #ccc;
   table-layout: fixed;
   border-radius: 8px;
   overflow: hidden;
@@ -194,7 +193,6 @@ th, td {
 }
 
 .steppingstone-table th, .steppingstone-table td {
-  border: 1px solid #e0e0e0;
   padding: 0.5rem;
   text-align: center;
   position: relative;
@@ -305,7 +303,6 @@ body.dark-mode #doneButton,
 body.dark-mode #startSteppingStoneButton {
   background: #444;
   color: #f0f0f0;
-  border: 1px solid #888;
 }
 
 body.dark-mode #nextStepButton:hover,
@@ -428,7 +425,7 @@ input:checked + .slider:before {
   height: 75px;
   text-align: center;
   position: relative;
-  border: 1px solid #ccc;
+ 
   color: #000;
 }
 #steppingstonetable td.allocated {
@@ -673,6 +670,14 @@ th.header-label {
     font-weight: bold;
     margin-top: 20px;
     font-size: 24px;
+    border-collapse: collapse;
+    width: 70x;         
+    height: 75x;
+}
+#reallocatedSteppingStoneTable {
+   border-collapse: collapse;
+    width: 70x;         
+    height: 75x;
 }
 #totalCostFormula {
   color: #333; /* light mode */
