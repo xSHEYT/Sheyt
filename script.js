@@ -51,17 +51,21 @@ function generateSample() {
       const demandSum = demand.reduce((a, b) => a + b, 0);
 
       if (supplySum > demandSum) {
+        
         // Scale demand up proportionally to match supply total
         const factor = supplySum / demandSum;
         demand = demand.map(val => Math.floor(val * factor));
+        
         // Fix rounding errors by adjusting last demand value
         const newDemandSum = demand.reduce((a, b) => a + b, 0);
         const diff = supplySum - newDemandSum;
         demand[demand.length - 1] += diff;
       } else if (demandSum > supplySum) {
+        
         // Scale supply up proportionally to match demand total
         const factor = demandSum / supplySum;
         supply = supply.map(val => Math.floor(val * factor));
+        
         // Fix rounding errors by adjusting last supply value
         const newSupplySum = supply.reduce((a, b) => a + b, 0);
         const diff = demandSum - newSupplySum;
@@ -121,8 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
   generateTable();
 });
 
-  // Generate the input table for entering costs, supply, and demand
-  function generateTable() {
+// Generate the input table for entering costs, supply, and demand
+function generateTable() {
   // Clear final matrix display
   document.getElementById('finalTable').innerHTML = '';
 
@@ -224,6 +228,7 @@ function generateMatrix() {
   const formulaElem = document.getElementById('totalCostFormula');
   const totalCostElem = document.getElementById('totalCost');
   const nextBtn = document.getElementById('nextStepButton');
+  
   if (totalCostElem && totalCostElem.textContent.trim() !== '') {
     if (nextBtn) nextBtn.style.display = 'none';  // Hide next button
   }
@@ -234,30 +239,30 @@ function generateMatrix() {
   const rows = table.rows;
 
   // Validate all input fields first
-for (let i = 1; i <= supplyCount; i++) {
-  for (let j = 1; j <= demandCount; j++) {
-    const input = rows[i].cells[j].querySelector('input');
-    if (!input || input.value.trim() === '') {
-      alert('Please insert all cost values before generating the matrix.');
+  for (let i = 1; i <= supplyCount; i++) {
+    for (let j = 1; j <= demandCount; j++) {
+      const input = rows[i].cells[j].querySelector('input');
+      if (!input || input.value.trim() === '') {
+        alert('Please insert all cost values before generating the matrix.');
+        return;
+      }
+    }
+
+    const supplyInput = rows[i].cells[demandCount + 1].querySelector('input');
+    if (!supplyInput || supplyInput.value.trim() === '') {
+      alert('Please insert all supply values before generating the matrix.');
       return;
     }
   }
 
-  const supplyInput = rows[i].cells[demandCount + 1].querySelector('input');
-  if (!supplyInput || supplyInput.value.trim() === '') {
-    alert('Please insert all supply values before generating the matrix.');
-    return;
+  const demandRowInputs = rows[supplyCount + 1];
+  for (let j = 1; j <= demandCount; j++) {
+    const demandInput = demandRowInputs.cells[j].querySelector('input');
+    if (!demandInput || demandInput.value.trim() === '') {
+      alert('Please insert all demand values before generating the matrix.');
+      return;
+    }
   }
-}
-
-const demandRowInputs = rows[supplyCount + 1];
-for (let j = 1; j <= demandCount; j++) {
-  const demandInput = demandRowInputs.cells[j].querySelector('input');
-  if (!demandInput || demandInput.value.trim() === '') {
-    alert('Please insert all demand values before generating the matrix.');
-    return;
-  }
-}
 
 
   let supplyTotal = 0;
@@ -344,10 +349,9 @@ for (let j = 1; j <= demandCount; j++) {
     adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal);
   }
 
-  // Clear the old Solve button before creating a new one
   // Clear old buttons
-const solveSection = document.getElementById('solveSection');
-solveSection.innerHTML = '';
+  const solveSection = document.getElementById('solveSection');
+  solveSection.innerHTML = '';
 
   // Create the Solve button with styles and append it
   const solveBtn = document.createElement('button');
@@ -362,11 +366,10 @@ solveSection.innerHTML = '';
   });
 
   solveSection.appendChild(solveBtn);
-
 }
 
 function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
-   const isDarkMode = document.body.classList.contains('dark-mode');
+  const isDarkMode = document.body.classList.contains('dark-mode');
   const finalRows = final.rows;
   let realSupplyCount = supplyCount; // number of original supply rows
   let realDemandCount = demandCount; // number of original demand columns
@@ -375,11 +378,11 @@ function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {
     const remainingDemand = supplyTotal - demandTotal;
 
     // Add header cell for the new dummy demand column, visually highlighted
-const newDemandHeader = document.createElement('th');
-newDemandHeader.textContent = `D${realDemandCount + 1}`;
-newDemandHeader.classList.add('dummy-demand-header'); // Apply reusable class
+    const newDemandHeader = document.createElement('th');
+    newDemandHeader.textContent = `D${realDemandCount + 1}`;
+    newDemandHeader.classList.add('dummy-demand-header'); // Apply reusable class
 
-finalRows[0].insertBefore(newDemandHeader, finalRows[0].cells[finalRows[0].cells.length - 1]);
+    finalRows[0].insertBefore(newDemandHeader, finalRows[0].cells[finalRows[0].cells.length - 1]);
 
 
     // Add a 0 cost cell for dummy demand to each supply row (to keep table consistent)
@@ -404,10 +407,9 @@ finalRows[0].insertBefore(newDemandHeader, finalRows[0].cells[finalRows[0].cells
 
   } else {
     const remainingSupply = demandTotal - supplyTotal;
-
     const newSupplyRow = document.createElement('tr');
 
-  // Add header for the new dummy supply row, visually highlighted
+    // Add header for the new dummy supply row, visually highlighted
     const newSupplyHeader = document.createElement('th');
     newSupplyHeader.textContent = `S${realSupplyCount + 1}`;
     newSupplyHeader.classList.add('dummy-supply-header'); // Reusable class

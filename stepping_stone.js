@@ -74,7 +74,6 @@ function displaySteppingStoneTable() {
     label.style.marginTop = '30px';
     label.classList.add('new-stepping-stone-label');
     
-
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(label);
     solveSection.appendChild(table);
@@ -154,7 +153,6 @@ function displayClosedPathsAndCosts(isLoop = false) {
     closedPathsSection.appendChild(label);
     closedPathsSection.appendChild(table);
 
-   
     solveSection.appendChild(container);
 
     // Append only the closed paths section if optimal
@@ -197,11 +195,8 @@ function getClosedPathsAndCosts() {
                 }
             }
         }
-    }
-
-    return closedPaths;
+    } return closedPaths;
 }
-
 // Stepping Stone Cycle Finder (Main Entry)
 function findSteppingStoneCycle(startI, startJ) {
     const path = [];
@@ -227,8 +222,7 @@ function findClosedPath(i, j, path, visited, startI, startJ) {
             visited.delete(key);
             path.pop();
         }
-    }
-    return false;
+    } return false;
 }
 
 function findColumnPath(i, j, path, visited, startI, startJ) {
@@ -240,7 +234,6 @@ function findColumnPath(i, j, path, visited, startI, startJ) {
             path.push(`S${row + 1}D${j + 1}`);
             return true; // Found valid closed path
         }
-
         // If allocated cell found in this column (different row)
         if (allocatedValues[row][j] > 0) {
             const key = `${row},${j}`;
@@ -256,8 +249,7 @@ function findColumnPath(i, j, path, visited, startI, startJ) {
             visited.delete(key);
             path.pop();
         }
-    }
-    return false; // No path found in this direction
+    } return false; // No path found in this direction
 }
 
 function findRowPath(i, j, path, visited, startI, startJ) {
@@ -269,7 +261,6 @@ function findRowPath(i, j, path, visited, startI, startJ) {
             path.push(`S${i + 1}D${col + 1}`);
             return true; // Found valid closed path
         }
-
         // If allocated cell found in this row (different column)
         if (allocatedValues[i][col] > 0) {
             const key = `${i},${col}`;
@@ -285,8 +276,7 @@ function findRowPath(i, j, path, visited, startI, startJ) {
             visited.delete(key);
             path.pop();
         }
-    }
-    return false; // No path found in this direction
+    } return false; // No path found in this direction
 }
 
 function calculateCost(path) {
@@ -316,9 +306,7 @@ function calculateCost(path) {
     if (netCost < mostNegativeNetCost) {
         mostNegativeNetCost = netCost;  // Update lowest cost found
         mostNegativePath = path;        // Store path causing it
-    }
-
-    return { costPath, netCost, mostNegativeNetCost, mostNegativePath };
+    } return { costPath, netCost, mostNegativeNetCost, mostNegativePath };
 }
 
 // Show updated stepping stone table with signs and highlight on critical cell
@@ -441,11 +429,8 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
             }
 
             row.appendChild(td);
-        }
-
-        newTable.appendChild(row);
+        } newTable.appendChild(row);
     }
-
     const label = document.createElement('h3');
     label.textContent = 'Grey: Add this value to + cells and Subtract from all (−) cells';
     label.classList.add('toggle-text');
@@ -454,8 +439,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
     container.appendChild(tableSection);
     tableSection.appendChild(newTable);
 }
-
-
 
 // Calculate total transportation cost based on current allocations
 function calculateTotalTransportationCost() {
@@ -485,7 +468,6 @@ function calculateTotalTransportationCost() {
     formulaElement.style.fontWeight = 'bold';
     formulaElement.classList.add('formula-text');
 
-
     // Display final total cost
     
     const result = document.createElement('h3');
@@ -494,12 +476,10 @@ function calculateTotalTransportationCost() {
     result.style.color = isDarkMode ? '#80e27e' : '#2e7d32';
     result.classList.add('result-text');
 
-
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(formulaElement);
     solveSection.appendChild(result);
 }
-
 
 // Perform Reallocation and update table
 function performReallocation(mostNegativeCell, closedPath, onDone) {
@@ -600,13 +580,10 @@ function displayReallocatedTable(minAllocation) {
             alloc.classList.add('alloc-value');
             td.appendChild(alloc);
         }
-
-
             row.appendChild(td);
         }
         table.appendChild(row);
     }
-
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(instructionLabel);
     solveSection.appendChild(table);
@@ -622,10 +599,10 @@ function displayAllocationSummary() {
 }
 
 function updateAllocations(path) {
-   let negativeCells = path.filter(cell => cell.sign === '-');
+    let negativeCells = path.filter(cell => cell.sign === '-');
     let minValue = Math.min(...negativeCells.map(cell => cell.supply));
 
-console.log('Minimum value among negative cells:', minValue);// Find the minimum supply/demand in the negative cells
+    console.log('Minimum value among negative cells:', minValue);// Find the minimum supply/demand in the negative cells
     console.log(`Reallocation minimum value: ${minValue}`);
 
     // Traverse the closed path

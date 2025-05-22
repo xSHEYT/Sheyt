@@ -135,16 +135,15 @@ async function allocateSupply(i, j, rows, supply, demand) {
       fontWeight: 'bold'
     });
 
-    allocDiv.classList.add('allocation-value');  // This is a separate statement
+    allocDiv.classList.add('allocation-value');  
 
 
-  cell.appendChild(allocDiv);
+    cell.appendChild(allocDiv);
 
   // Mark allocated cells to avoid greying out later
   if (allocation > 0) {
     cell.dataset.allocated = 'true';
   }
-
   // Decrease supply and demand by allocated amount
   supply[i] -= allocation;
   demand[j] -= allocation;
@@ -177,7 +176,6 @@ async function allocateSupply(i, j, rows, supply, demand) {
       }
     }
   }
-
   await delay(300);  // Pause briefly so user can see the change before next step
 }
 
@@ -216,15 +214,14 @@ function displayTotalCost() {
 
   // Add a button to start the Stepping Stone method if it's not already added
   if (!document.getElementById('startSteppingStoneButton')) {
-  const startButton = document.createElement('button');
-  startButton.id = 'startSteppingStoneButton';
-  startButton.textContent = 'Start Stepping Stone';
-  startButton.addEventListener('click', startSteppingStoneMethod);
+    const startButton = document.createElement('button');
+    startButton.id = 'startSteppingStoneButton';
+    startButton.textContent = 'Start Stepping Stone';
+    startButton.addEventListener('click', startSteppingStoneMethod);
 
-  document.getElementById('solveSection').appendChild(startButton);
+    document.getElementById('solveSection').appendChild(startButton);
+  }
 }
-}
-
 
 // Starts the Stepping Stone method process (placeholder function check)
 function startSteppingStoneMethod() {
