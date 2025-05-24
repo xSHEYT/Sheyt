@@ -546,7 +546,7 @@ body.dark-mode #steppingstonetable td.allocated {
 }
 
 body.dark-mode #steppingstonetable td.highlight-yellow {
-  background-color: #cabf4b; /* dark mode yellow */
+  background-color: #918934; /* dark mode yellow */
 }
 
 #steppingstonetable td.highlight-grey {
@@ -692,7 +692,7 @@ body.dark-mode #totalCostFormula {
 }
 
 body.dark-mode #totalCost {
-  color: #4caf50; /* dark mode green */
+  color: #446c47; /* dark mode green */
 }
 .allocation-value {
   position: absolute;
@@ -796,3 +796,13 @@ body.dark-mode .dummy-supply-header {
     transform: scale(0.8);
     z-index: 1000;
   }
+
+  /* Highlight for light mode */
+.highlight-negative {
+  background-color: yellow;
+}
+
+/* Highlight for dark mode */
+.dark-mode .highlight-negative {
+  background-color: #918934;
+}

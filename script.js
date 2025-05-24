@@ -118,6 +118,12 @@ function generateSample() {
       input.value = Math.floor(Math.random() * 20) + 1;
     }
   }
+  // Show total supply and demand in the bottom-right cell
+  const lastRow = table.rows[table.rows.length - 1]; // last row (demand row)
+  const lastCell = lastRow.cells[lastRow.cells.length - 1]; // last cell in demand row
+  lastCell.innerHTML = `Supply: ${totalSupply}<br>Demand: ${totalDemand}`;
+  lastCell.style.fontWeight = 'bold';
+  lastCell.style.textAlign = 'center';
 }
 
 // When page loads, generate initial input table with default sizes
@@ -345,9 +351,30 @@ function generateMatrix() {
   finalTableSection.appendChild(final);
 
   // Check if supply and demand are not equal, adjust with dummy supply/demand
+  // After adjusting for dummy rows/columns, update total supply and demand display
   if (supplyTotal !== demandTotal) {
-    adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal);
+  adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal);
+
+  // Recalculate totals to include dummy rows/columns
+  let newSupplyTotal = 0;
+  let newDemandTotal = 0;
+
+  // Sum supply column (last column except last row)
+  for (let i = 1; i < final.rows.length - 1; i++) {
+    newSupplyTotal += Number(final.rows[i].cells[final.rows[i].cells.length - 1].textContent) || 0;
   }
+
+  // Sum demand row (last row except last cell)
+  const lastRow = final.rows[final.rows.length - 1];
+  for (let j = 1; j < lastRow.cells.length - 1; j++) {
+    newDemandTotal += Number(lastRow.cells[j].textContent) || 0;
+  }
+
+  // Update bottom-right cell in demand row
+  const bottomRightCell = lastRow.cells[lastRow.cells.length - 1];
+  bottomRightCell.innerHTML = `Supply: ${newSupplyTotal}<br>Demand: ${newDemandTotal}`;
+}
+
 
   // Clear old buttons
   const solveSection = document.getElementById('solveSection');

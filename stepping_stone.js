@@ -125,7 +125,9 @@ function displayClosedPathsAndCosts(isLoop = false) {
 
     let mostNegativePath = null;
     let mostNegativeCell = null;
+    let mostNegativeRow = null;
 
+    // Loop through paths and build table rows
     for (const item of paths) {
         const row = document.createElement('tr');
 
@@ -144,15 +146,24 @@ function displayClosedPathsAndCosts(isLoop = false) {
 
         table.appendChild(row);
 
+        // Track most negative net cost and corresponding row element
         if (!mostNegativePath || item.netCost < mostNegativePath.netCost) {
             mostNegativePath = item;
             mostNegativeCell = item.cell;
+            mostNegativeRow = row;  
         }
+    }
+
+    // Highlight the row with the most negative net cost
+    if (mostNegativeRow && mostNegativePath.netCost < 0) {
+        mostNegativeRow.classList.add('highlight-negative');
     }
 
     closedPathsSection.appendChild(label);
     closedPathsSection.appendChild(table);
+    
 
+    container.appendChild(closedPathsSection);
     solveSection.appendChild(container);
 
     // Append only the closed paths section if optimal
@@ -281,32 +292,20 @@ function findRowPath(i, j, path, visited, startI, startJ) {
 
 function calculateCost(path) {
     const costPath = [];
-    let sign = 1; // Start with positive sign for first segment
+    let sign = 1; // start +
     let netCost = 0;
-    let mostNegativeNetCost = Infinity;  // Initialize for tracking negative costs
-    let mostNegativePath = null;  // To store path with most negative cost
 
-    // Loop through each cell in path except last (cycle ends at first cell)
     for (let k = 0; k < path.length - 1; k++) {
-        const [rowStr, colStr] = path[k].match(/\d+/g); // Extract indices
+        const [rowStr, colStr] = path[k].match(/\d+/g);
         const row = parseInt(rowStr) - 1;
         const col = parseInt(colStr) - 1;
         const cost = costs[row][col];
 
-        // Assign sign symbol for display
-        const symbol = sign > 0 ? '+' : '-';
-        costPath.push(`${symbol}${cost}`);
-
-        netCost += sign * cost; // Accumulate net cost
-
-        sign *= -1; // Alternate sign for next segment
+        costPath.push((sign > 0 ? '+' : '-') + cost);
+        netCost += sign * cost;
+        sign = -sign;
     }
-
-    // Check if this path has the lowest (most negative) net cost so far
-    if (netCost < mostNegativeNetCost) {
-        mostNegativeNetCost = netCost;  // Update lowest cost found
-        mostNegativePath = path;        // Store path causing it
-    } return { costPath, netCost, mostNegativeNetCost, mostNegativePath };
+    return { costPath, netCost };
 }
 
 // Show updated stepping stone table with signs and highlight on critical cell
@@ -440,6 +439,8 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
     tableSection.appendChild(newTable);
 }
 
+
+
 // Calculate total transportation cost based on current allocations
 function calculateTotalTransportationCost() {
     let totalCost = 0;
@@ -522,13 +523,13 @@ function performReallocation(mostNegativeCell, closedPath, onDone) {
 
     // Show updated table with arrows, signs, and grey-highlighted minimum cell
     displayReallocatedTable(minAllocation, closedPath, minCellBeforeAlloc);
-    displayAllocationSummary();
+
 
     if (onDone) onDone();
 }
 
 
-function displayReallocatedTable(minAllocation) {
+function displayReallocatedTable(minAllocation, closedPath, minCellBeforeAlloc) {
     const instructionLabel = document.createElement('h3');
     instructionLabel.textContent = `New Stepping Stone Table`;
     instructionLabel.classList.add('new-stepping-stone-label');
@@ -589,14 +590,6 @@ function displayReallocatedTable(minAllocation) {
     solveSection.appendChild(table);
 }
 
-
-// Display Allocation Summary
-function displayAllocationSummary() {
-    for (let i = 0; i < allocatedValues.length; i++) {
-        for (let j = 0; j < allocatedValues[i].length; j++) {
-        }
-    }
-}
 
 function updateAllocations(path) {
     let negativeCells = path.filter(cell => cell.sign === '-');
@@ -660,9 +653,6 @@ adjusts allocatedValues accordingly, updates the display table, and triggers a c
 
 displayReallocatedTable(minAllocation):
 Creates and displays a table showing the updated allocations after reallocation, along with instructions describing the adjustment process.
-
-displayAllocationSummary():
-Placeholder function to display or update allocation summary details; currently empty but can be extended for summaries or logs.
 
 updateAllocations(path):
 Adjusts allocation values along a given path by subtracting the minimum allocation from '-' cells and adding it to '+' cells;
