@@ -1,18 +1,12 @@
-// Display Stepping Stone Table
 function displaySteppingStoneTable() {
     const existingTable = document.getElementById('steppingstonetable');
     if (existingTable) return;
-
     const isDarkMode = document.body.classList.contains('dark-mode');
-
     const table = document.createElement('table');
     table.id = 'steppingstonetable';
     table.style.marginTop = '20px';
-
     const supplyCount = allocatedValues.length;
     const demandCount = allocatedValues[0].length;
-
-    // Header row
     const headerRow = document.createElement('tr');
     const cornerCell = document.createElement('th');
     cornerCell.textContent = '';
@@ -21,17 +15,13 @@ function displaySteppingStoneTable() {
     for (let j = 0; j < demandCount; j++) {
         const th = document.createElement('th');
         th.textContent = 'D' + (j + 1);
-        // Remove inline color, let CSS handle it
         headerRow.appendChild(th);
     }
     table.appendChild(headerRow);
-
-    // Data rows
     for (let i = 0; i < supplyCount; i++) {
         const row = document.createElement('tr');
         const label = document.createElement('th');
         label.textContent = 'S' + (i + 1);
-        // Remove inline color
         row.appendChild(label);
 
         for (let j = 0; j < demandCount; j++) {
@@ -41,19 +31,13 @@ function displaySteppingStoneTable() {
             td.style.height = '75px';
             td.style.textAlign = 'center';
             td.style.position = 'relative';
-            // Remove inline border, CSS will style it
-
-            // Cost tag
             const costTag = document.createElement('div');
             costTag.textContent = costs[i][j];
             costTag.style.position = 'absolute';
             costTag.style.top = '2px';
             costTag.style.right = '4px';
             costTag.style.fontSize = '11px';
-            // Remove inline color, let CSS handle
             td.appendChild(costTag);
-
-            // Allocation display
             if (allocatedValues[i][j] > 0) {
                 td.classList.add('allocated');  
                 const allocTag = document.createElement('div');
@@ -67,7 +51,6 @@ function displaySteppingStoneTable() {
         }
         table.appendChild(row);
     }
-
     const label = document.createElement('h3');
     label.textContent = 'Intial Stepping Stone Table';
     label.style.marginTop = '30px';
@@ -76,8 +59,6 @@ function displaySteppingStoneTable() {
     const solveSection = document.getElementById('solveSection');
     solveSection.appendChild(label);
     solveSection.appendChild(table);
-
-    // Solve Stepping Stone Button
     const solveButton = document.createElement('button');
     solveButton.textContent = 'Solve Stepping Stone';
     solveButton.style.marginTop = '20px';
@@ -90,20 +71,15 @@ function displaySteppingStoneTable() {
     solveSection.appendChild(solveButton);
     solveButton.scrollIntoView({ behavior: 'smooth' });
 }
-
-// Display Closed Paths and Net Cost Changes
 function displayClosedPathsAndCosts(isLoop = false) {
     const paths = getClosedPathsAndCosts();
 
     const solveSection = document.getElementById('solveSection');
-
-    // Create container for side-by-side layout
     const container = document.createElement('div');
     container.style.display = 'flex';
     container.style.gap = '40px';
     container.style.alignItems = 'flex-start';
 
-    // Create section for closed paths
     const closedPathsSection = document.createElement('div');
     closedPathsSection.style.flex = '1';
 
@@ -115,7 +91,7 @@ function displayClosedPathsAndCosts(isLoop = false) {
     table.style.marginTop = '10px';
 
     const header = document.createElement('tr');
-    ['Unoccupied Cell', 'Closed Path', 'Net Cost Change', 'Action'].forEach(text => {
+    ['Unoccupied Cell', 'Closed Path', 'Net Cost Change'].forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
         header.appendChild(th);
@@ -126,7 +102,6 @@ function displayClosedPathsAndCosts(isLoop = false) {
     let mostNegativeCell = null;
     let mostNegativeRow = null;
 
-    // Loop through paths and build table rows
     for (const item of paths) {
         const row = document.createElement('tr');
 
@@ -143,110 +118,42 @@ function displayClosedPathsAndCosts(isLoop = false) {
         cost.textContent = `${prettyCost} = ${item.netCost}`;
         row.appendChild(cost);
 
-        // Add "View" button
-        const actionCell = document.createElement('td');
-        const viewButton = document.createElement('button');
-        viewButton.textContent = 'View';
-        viewButton.addEventListener('click', () => {
-            // Custom action on view click
-            viewPathDetails(item); // You need to define this function
-        });
-        actionCell.appendChild(viewButton);
-        row.appendChild(actionCell);
-
         table.appendChild(row);
-
-        // Track most negative net cost and corresponding row element
         if (!mostNegativePath || item.netCost < mostNegativePath.netCost) {
             mostNegativePath = item;
             mostNegativeCell = item.cell;
-            mostNegativeRow = row;
+            mostNegativeRow = row;  
         }
     }
 
-    // Highlight the row with the most negative net cost
     if (mostNegativeRow && mostNegativePath.netCost < 0) {
         mostNegativeRow.classList.add('highlight-negative');
     }
 
     closedPathsSection.appendChild(label);
     closedPathsSection.appendChild(table);
+    
+
     container.appendChild(closedPathsSection);
     solveSection.appendChild(container);
 
-    // If optimal, end here
     if (!mostNegativePath || mostNegativePath.netCost >= 0) {
-        calculateTotalTransportationCost(); // Show final cost
+        container.appendChild(closedPathsSection);
+        solveSection.appendChild(container);
+        calculateTotalTransportationCost(); 
         return;
     }
-
-    // Display updated table on the left side of closed paths
+    container.appendChild(closedPathsSection);
     displayUpdatedSteppingStoneTable(mostNegativeCell, mostNegativePath.path, container);
-
-    // Reallocate and continue looping
+    
     performReallocation(mostNegativeCell, mostNegativePath.path, () => {
         setTimeout(() => {
             displayClosedPathsAndCosts(true);
-        }, 50);
+        }, 50); 
     });
 }
-
-function viewPathDetails(pathItem) {
-    // Remove existing floating window if any
-    const existing = document.getElementById('floatingViewBox');
-    if (existing) existing.remove();
-
-    // Create the floating window
-    const box = document.createElement('div');
-    box.id = 'floatingViewBox';
-    box.style.position = 'fixed';
-    box.style.top = '10%';
-    box.style.left = '50%';
-    box.style.transform = 'translate(-50%, 0)';
-    box.style.zIndex = '1000';
-    box.style.backgroundColor = '#fff';
-    box.style.border = '1px solid #ccc';
-    box.style.borderRadius = '10px';
-    box.style.padding = '20px';
-    box.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
-    box.style.maxHeight = '80vh';
-    box.style.overflowY = 'auto';
-    box.style.minWidth = '400px';
-    box.style.maxWidth = '700px';
-
-    // Add title & cost summary
-    const headerHTML = `
-        <h4>Viewing Path for Cell ${pathItem.cell}</h4>
-        <p><strong>Closed Path:</strong> ${pathItem.path.join(' → ')}</p>
-        <p><strong>Cost Expression:</strong> ${pathItem.costPath.join(' ').replace(/^\+/, '')}</p>
-        <p><strong>Net Cost:</strong> ${pathItem.netCost}</p>
-        <div style="text-align: right;">
-            <button id="closeFloatingBox">Close</button>
-        </div>
-        <hr>
-    `;
-    box.innerHTML = headerHTML;
-
-    // Add placeholder container for the stepping stone table
-    const tableContainer = document.createElement('div');
-    tableContainer.id = 'floatingTableContainer';
-    box.appendChild(tableContainer);
-
-    document.body.appendChild(box);
-
-    // Close handler
-    document.getElementById('closeFloatingBox').addEventListener('click', () => {
-        box.remove();
-    });
-
-    // Now inject the stepping stone table inside the box
-    displayUpdatedSteppingStoneTable(pathItem.cell, pathItem.path, tableContainer);
-}
-
-// Get Closed Paths and Net Cost Changes 
 function getClosedPathsAndCosts() {
     const closedPaths = [];
-
     for (let i = 0; i < allocatedValues.length; i++) {
         for (let j = 0; j < allocatedValues[i].length; j++) {
             if (allocatedValues[i][j] === 0) {
@@ -264,7 +171,6 @@ function getClosedPathsAndCosts() {
         }
     } return closedPaths;
 }
-// Stepping Stone Cycle Finder (Main Entry)
 function findSteppingStoneCycle(startI, startJ) {
     const path = [];
     path.push(`S${startI + 1}D${startJ + 1}`);
@@ -272,8 +178,6 @@ function findSteppingStoneCycle(startI, startJ) {
     const found = findClosedPath(startI, startJ, path, visited, startI, startJ);
     return found ? path : null;
 }
-
-// Alternating Row → Column Recursive Search
 function findClosedPath(i, j, path, visited, startI, startJ) {
     for (let col = 0; col < allocatedValues[0].length; col++) {
         if (col === j) continue;
@@ -291,64 +195,44 @@ function findClosedPath(i, j, path, visited, startI, startJ) {
         }
     } return false;
 }
-
 function findColumnPath(i, j, path, visited, startI, startJ) {
     for (let row = 0; row < allocatedValues.length; row++) {
-        if (row === i) continue; // Skip current row
-
-        // Check if we completed a cycle by returning to start cell with minimum path length
+        if (row === i) continue; 
         if (row === startI && j === startJ && path.length >= 3) {
             path.push(`S${row + 1}D${j + 1}`);
-            return true; // Found valid closed path
+            return true; 
         }
-        // If allocated cell found in this column (different row)
         if (allocatedValues[row][j] > 0) {
             const key = `${row},${j}`;
-            if (visited.has(key)) continue; // Avoid cycles/loops
-
-            visited.add(key); // Mark cell visited
-            path.push(`S${row + 1}D${j + 1}`); // Add cell to path
-
-            // Try to continue path searching along rows now
+            if (visited.has(key)) continue;
+            visited.add(key);
             if (findRowPath(row, j, path, visited, startI, startJ)) return true;
-
-            // Backtrack if path not found
             visited.delete(key);
             path.pop();
         }
-    } return false; // No path found in this direction
+    } return false; 
 }
-
 function findRowPath(i, j, path, visited, startI, startJ) {
     for (let col = 0; col < allocatedValues[0].length; col++) {
-        if (col === j) continue; // Skip current column
-
-        // Check if we completed a cycle by returning to start cell with minimum path length
+        if (col === j) continue; 
         if (i === startI && col === startJ && path.length >= 3) {
             path.push(`S${i + 1}D${col + 1}`);
-            return true; // Found valid closed path
+            return true; 
         }
-        // If allocated cell found in this row (different column)
         if (allocatedValues[i][col] > 0) {
             const key = `${i},${col}`;
-            if (visited.has(key)) continue; // Avoid revisiting
-
-            visited.add(key); // Mark cell visited
-            path.push(`S${i + 1}D${col + 1}`); // Add cell to path
-
-            // Try to continue path searching along columns now
+            if (visited.has(key)) continue; 
+            visited.add(key); 
+            path.push(`S${i + 1}D${col + 1}`); 
             if (findColumnPath(i, col, path, visited, startI, startJ)) return true;
-
-            // Backtrack if no path found
             visited.delete(key);
             path.pop();
         }
-    } return false; // No path found in this direction
+    } return false; 
 }
-
 function calculateCost(path) {
     const costPath = [];
-    let sign = 1; // start +
+    let sign = 1; 
     let netCost = 0;
 
     for (let k = 0; k < path.length - 1; k++) {
@@ -363,19 +247,15 @@ function calculateCost(path) {
     }
     return { costPath, netCost };
 }
-
-// Show updated stepping stone table with signs and highlight on critical cell
 function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, container) {
     const tableSection = document.createElement('div');
     tableSection.style.flex = '1';
-
     const newTable = document.createElement('table');
     newTable.id = 'steppingstonetable';
     newTable.style.marginTop = '20px';
 
     const supplyCount = allocatedValues.length;
     const demandCount = allocatedValues[0].length;
-
     const headerRow = document.createElement('tr');
     const cornerCell = document.createElement('th');
     cornerCell.textContent = '';
@@ -387,7 +267,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
         headerRow.appendChild(th);
     }
     newTable.appendChild(headerRow);
-
     const signMap = new Map();
     const arrowMap = new Map();
     const negativeCells = [];
@@ -399,7 +278,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
         const cellSign = sign > 0 ? '+' : '−';
         signMap.set(current, cellSign);
         sign *= -1;
-
         const [curRow, curCol] = current.match(/\d+/g).map(Number);
         const [nextRow, nextCol] = next.match(/\d+/g).map(Number);
 
@@ -410,7 +288,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
             arrow = nextRow > curRow ? '↓' : '↑';
         }
         arrowMap.set(current, arrow);
-
         if (cellSign === '−') {
             const i = curRow - 1;
             const j = curCol - 1;
@@ -419,7 +296,6 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
             }
         }
     }
-
     let leastNegativeCell = null;
     if (negativeCells.length > 0) {
         leastNegativeCell = negativeCells.reduce((min, cell) => cell.value < min.value ? cell : min);
@@ -437,14 +313,11 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
             td.style.height = '75px';
             td.style.textAlign = 'center';
             td.style.position = 'relative';
-
             const cellId = `S${i + 1}D${j + 1}`;
-
             const costTag = document.createElement('div');
             costTag.textContent = costs[i][j];
             costTag.classList.add('cost-tag');
             td.appendChild(costTag);
-
             if (signMap.has(cellId)) {
                 const signTag = document.createElement('div');
                 signTag.textContent = signMap.get(cellId);
@@ -456,14 +329,12 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
                 signTag.style.color = signMap.get(cellId) === '+' ? '#2e7d32' : '#c62828';
                 td.appendChild(signTag);
             }
-
             if (arrowMap.has(cellId)) {
                 const arrowTag = document.createElement('div');
                 arrowTag.textContent = arrowMap.get(cellId);
                 arrowTag.classList.add('arrow-tag');
                 td.appendChild(arrowTag);
             }
-
             if (allocatedValues[i][j] > 0) {
                 td.classList.add('allocated');
                 const allocTag = document.createElement('div');
@@ -474,15 +345,12 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
             } else {
                 td.classList.add('unallocated');
             }
-
             if (cellId === mostNegativeCell) {
                 td.classList.add('highlight-yellow');
             }
-
             if (leastNegativeCell && leastNegativeCell.row === i && leastNegativeCell.col === j) {
                 td.classList.add('highlight-grey');
             }
-
             row.appendChild(td);
         } newTable.appendChild(row);
     }
@@ -490,20 +358,13 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
     label.textContent = 'Grey: Add this value to + cells and Subtract from all (−) cells';
     label.classList.add('toggle-text');
 
-    // Assign an id to the container or tableSection for scrolling later
     tableSection.id = 'steppingStoneTableSection';
-    
-
     tableSection.appendChild(label);
     container.appendChild(tableSection);
     tableSection.appendChild(newTable);
 
     document.getElementById('steppingStoneTableSection').scrollIntoView({ behavior: 'smooth' });
 }
-
-
-
-// Calculate total transportation cost based on current allocations
 function calculateTotalTransportationCost() {
     let totalCost = 0;
     let formulaParts = [];
@@ -518,21 +379,16 @@ function calculateTotalTransportationCost() {
             }
         }
     }
-
     const isDarkMode = document.body.classList.contains('dark-mode');
 
-    // Join formula parts
     const formulaString = formulaParts.join(' + ');
 
-    // Display formula
     const formulaElement = document.createElement('p');
     formulaElement.textContent = `Total Cost Formula = ${formulaString}`;
     formulaElement.style.marginTop = '20px';
     formulaElement.style.fontWeight = 'bold';
     formulaElement.classList.add('formula-text');
 
-    // Display final total cost
-    
     const result = document.createElement('h3');
     result.textContent = `Optimum Total Cost = ${totalCost}`;
     result.style.marginTop = '10px';
@@ -543,10 +399,7 @@ function calculateTotalTransportationCost() {
     solveSection.appendChild(formulaElement);
     solveSection.appendChild(result);
 }
-
-// Perform Reallocation and update table
 function performReallocation(mostNegativeCell, closedPath, onDone) {
-    // Remove duplicate last cell if it's a closed loop
     const [firstRowStr, firstColStr] = closedPath[0].match(/\d+/g);
     const [lastRowStr, lastColStr] = closedPath[closedPath.length - 1].match(/\d+/g);
     if (firstRowStr === lastRowStr && firstColStr === lastColStr) closedPath.pop();
@@ -558,7 +411,6 @@ function performReallocation(mostNegativeCell, closedPath, onDone) {
     let minAllocation = Infinity;
     let minCellBeforeAlloc = null;
 
-    // Identify the minimum allocated cell among '-' signed cells before allocation
     for (const entry of signedPath) {
         const [rowStr, colStr] = entry.cell.match(/\d+/g);
         const row = parseInt(rowStr) - 1;
@@ -570,8 +422,6 @@ function performReallocation(mostNegativeCell, closedPath, onDone) {
             }
         }
     }
-
-    // Apply reallocation based on the signed path
     for (const entry of signedPath) {
         const [rowStr, colStr] = entry.cell.match(/\d+/g);
         const row = parseInt(rowStr) - 1;
@@ -582,15 +432,9 @@ function performReallocation(mostNegativeCell, closedPath, onDone) {
             allocatedValues[row][col] -= minAllocation;
         }
     }
-
-    // Show updated table with arrows, signs, and grey-highlighted minimum cell
     displayReallocatedTable(minAllocation, closedPath, minCellBeforeAlloc);
-
-
     if (onDone) onDone();
 }
-
-
 function displayReallocatedTable(minAllocation, closedPath, minCellBeforeAlloc) {
     const instructionLabel = document.createElement('h3');
     instructionLabel.textContent = `New Stepping Stone Table`;
@@ -651,16 +495,13 @@ function displayReallocatedTable(minAllocation, closedPath, minCellBeforeAlloc) 
     solveSection.appendChild(instructionLabel);
     solveSection.appendChild(table);
 }
-
-
 function updateAllocations(path) {
     let negativeCells = path.filter(cell => cell.sign === '-');
     let minValue = Math.min(...negativeCells.map(cell => cell.supply));
 
-    console.log('Minimum value among negative cells:', minValue);// Find the minimum supply/demand in the negative cells
+    console.log('Minimum value among negative cells:', minValue);
     console.log(`Reallocation minimum value: ${minValue}`);
 
-    // Traverse the closed path
     path.forEach(cell => {
         if (cell.sign === '-') {
             console.log(`Reducing ${cell.name} by ${minValue}`);
@@ -670,52 +511,7 @@ function updateAllocations(path) {
             cell.allocation += minValue;
         }
     });
-
-    // Log the updated allocations
     path.forEach(cell => {
         console.log(`Updated allocation for ${cell.name}: ${cell.allocation}`);
     });
 }
-
-/*
-displaySteppingStoneTable(): Creates and shows the stepping stone table with costs and current allocations.
-Adds a button to start the Stepping Stone solution process.
-
-displayClosedPathsAndCosts(isLoop): Finds and displays all closed paths and their net cost changes.
-If a negative net cost path exists, triggers reallocation and loops until optimal.
-
-getClosedPathsAndCosts(): Scans all unallocated cells to find closed cycles and computes their net cost changes.
-Returns a list of these paths with cost info.
-
-findSteppingStoneCycle(startI, startJ): Attempts to find a closed path (cycle) starting from a given unallocated cell.
-Returns the path if found; otherwise null.
-
-findClosedPath(i, j, path, visited, startI, startJ): Recursive helper that searches along rows for next allocated cell in cycle.
-Tries to build a valid closed path by alternating row and column moves.
-Returns true if path found, false otherwise.
-
-findColumnPath(i, j, path, visited, startI, startJ): 
-    Recursively searches vertically (down/up) for a closed path in the stepping stone method, avoiding visited cells and building a cycle.
-
-findRowPath(i, j, path, visited, startI, startJ): 
-    Recursively searches horizontally (left/right) for a closed path in the stepping stone method, complementing findColumnPath to form a full cycle.
-
-calculateCost(path): 
-    Calculates net cost of a given closed path by alternating signs (+/-) on each cell's cost; tracks and returns the path with the most negative net cost.
-
-displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath): 
-    Builds and displays an updated table showing costs, allocations, plus/minus signs along the closed path, highlighting the cell with the most negative net cost.
-
-calculateTotalTransportationCost(): 
-    Computes the total transportation cost from all allocated values multiplied by their costs and displays the final result in the UI.
-
-performReallocation(mostNegativeCell, closedPath, onDone):
-Updates allocations along the closed path by shifting supply based on the minimum allocation on '-' cells;
-adjusts allocatedValues accordingly, updates the display table, and triggers a callback after completion.
-
-displayReallocatedTable(minAllocation):
-Creates and displays a table showing the updated allocations after reallocation, along with instructions describing the adjustment process.
-
-updateAllocations(path):
-Adjusts allocation values along a given path by subtracting the minimum allocation from '-' cells and adding it to '+' cells;
-*/

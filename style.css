@@ -806,3 +806,43 @@ body.dark-mode .dummy-supply-header {
 .dark-mode .highlight-negative {
   background-color: #918934;
 }
+
+.floating-panel {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  padding: 20px;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 80%;
+}
+.floating-panel.dark-mode {
+  background: #333;
+  color: #eee;
+}
+.floating-panel.hidden {
+  display: none;
+}
+.floating-panel-content {
+  position: relative;
+}
+#closeViewPanelBtn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+}
+#closeViewPanelBtn:hover {
+  color: red;
+}

@@ -6,6 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 //git add . 
-//git commit -m "Tangina nyo"
+//git commit -m "with anchor"
 //git push origin main
 
