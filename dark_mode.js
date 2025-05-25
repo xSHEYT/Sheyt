@@ -5,3 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("dark-mode");
   });
 });
+//git add . 
+//git commit -m "Tangina nyo"
+//git push origin main
+

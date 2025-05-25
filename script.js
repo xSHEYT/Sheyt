@@ -147,9 +147,21 @@ function generateTable() {
   supplyCount = parseInt(document.getElementById('rowsInput').value);
   demandCount = parseInt(document.getElementById('columnsInput').value);
 
-  // Check for invalid input sizes
-  if (supplyCount <= 1 || demandCount <= 1) {
-    alert("Please enter a value greater than 1 for both rows and columns.");
+  // Check for invalid input sizes: no letters, no decimals, and > 1
+function isValidInput(value) {
+    // Check if it's an integer greater than 1
+    return Number.isInteger(value) && value > 1;
+  }
+
+  // Assuming supplyCount and demandCount come from input fields as strings
+  const supplyCountNum = Number(supplyCount);
+  const demandCountNum = Number(demandCount);
+
+  if (
+    !isValidInput(supplyCountNum) ||
+    !isValidInput(demandCountNum)
+  ) {
+    alert("Please enter an integer greater than 1, no letters or decimals allowed.");
     return;
   }
 
@@ -393,6 +405,8 @@ function generateMatrix() {
   });
 
   solveSection.appendChild(solveBtn);
+
+  document.getElementById('finalTable').scrollIntoView({ behavior: 'smooth' });
 }
 
 function adjustForDummyRowsAndColumns(final, supplyTotal, demandTotal) {

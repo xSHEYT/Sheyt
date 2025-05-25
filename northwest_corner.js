@@ -57,12 +57,12 @@ async function solveNorthWestCorner(final) {
 
   let i = 0, j = 0;  // Start from the top-left corner cell
 
-  // Only add the Next button if it's not already there
+  //add the Next button 
     if (!document.getElementById('nextStepButton')) {
     const nextBtn = document.createElement('button');
     nextBtn.id = 'nextStepButton';
     nextBtn.textContent = 'Next';
-    nextBtn.classList.add('next-button'); // Add class for styling
+    nextBtn.classList.add('next-button'); 
 
     // Keep static styles if needed
     nextBtn.style.marginTop = '20px';
@@ -212,7 +212,7 @@ function displayTotalCost() {
   formulaEl.textContent = formula;
   totalCostEl.textContent = "Initial Total Cost = " + totalCost;
 
-  // Add a button to start the Stepping Stone method if it's not already added
+  // Add a button to start the Stepping Stone method 
   if (!document.getElementById('startSteppingStoneButton')) {
     const startButton = document.createElement('button');
     startButton.id = 'startSteppingStoneButton';
@@ -220,10 +220,11 @@ function displayTotalCost() {
     startButton.addEventListener('click', startSteppingStoneMethod);
 
     document.getElementById('solveSection').appendChild(startButton);
+    startButton.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-// Starts the Stepping Stone method process (placeholder function check)
+// Starts the Stepping Stone method process 
 function startSteppingStoneMethod() {
   if (typeof displaySteppingStoneTable === 'function') {
     displaySteppingStoneTable();

@@ -55,13 +55,12 @@ function displaySteppingStoneTable() {
 
             // Allocation display
             if (allocatedValues[i][j] > 0) {
-                td.classList.add('allocated');  // Use CSS class instead of inline style
+                td.classList.add('allocated');  
                 const allocTag = document.createElement('div');
                 allocTag.textContent = allocatedValues[i][j];
                 allocTag.style.marginTop = '14px';
                 allocTag.style.fontWeight = 'bold';
-                // For color, you can keep inline or also use class if you want
-                td.style.color = ''; // Let CSS decide color
+                td.style.color = ''; 
                 td.appendChild(allocTag);
             }
             row.appendChild(td);
@@ -82,15 +81,15 @@ function displaySteppingStoneTable() {
     const solveButton = document.createElement('button');
     solveButton.textContent = 'Solve Stepping Stone';
     solveButton.style.marginTop = '20px';
-    solveButton.id = 'startSteppingStoneButton'; // So your CSS targets it correctly
+    solveButton.id = 'startSteppingStoneButton';
 
     solveButton.onclick = function () {
         solveButton.disabled = true;
         displayClosedPathsAndCosts(true);
     };
     solveSection.appendChild(solveButton);
+    solveButton.scrollIntoView({ behavior: 'smooth' });
 }
-
 
 // Display Closed Paths and Net Cost Changes
 function displayClosedPathsAndCosts(isLoop = false) {
@@ -434,9 +433,15 @@ function displayUpdatedSteppingStoneTable(mostNegativeCell, closedPath, containe
     label.textContent = 'Grey: Add this value to + cells and Subtract from all (−) cells';
     label.classList.add('toggle-text');
 
+    // Assign an id to the container or tableSection for scrolling later
+    tableSection.id = 'steppingStoneTableSection';
+    
+
     tableSection.appendChild(label);
     container.appendChild(tableSection);
     tableSection.appendChild(newTable);
+
+    document.getElementById('steppingStoneTableSection').scrollIntoView({ behavior: 'smooth' });
 }
 
 
